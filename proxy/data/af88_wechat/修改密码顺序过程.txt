@@ -1,0 +1,9 @@
+wx_retrievesend.do    输入验证码
+/retrieveverifycode.do  获取验证码
+
+wx_retrieveupdateinit.do?arictype=password   输入新密码
+
+/retrieveupdate.do  更新密码
+
+/weChat/wx_retrievefinal.do?arictype=password  设置成功
+retrievesend.do

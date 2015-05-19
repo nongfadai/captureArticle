@@ -1,0 +1,91 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'D:\\Program Files\\nodejs\\\\node.exe',
+1 verbose cli   'D:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'isntall',
+1 verbose cli   'cookie-parse' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.33
+4 verbose node symlink D:\Program Files\nodejs\\node.exe
+5 warn package.json proxy@1.0.0 No description
+6 warn package.json proxy@1.0.0 No repository field.
+7 warn package.json proxy@1.0.0 No README data
+8 verbose readDependencies using package.json deps
+9 verbose cache add [ 'cookie-parse', null ]
+10 verbose cache add name=undefined spec="cookie-parse" args=["cookie-parse",null]
+11 verbose parsed url { protocol: null,
+11 verbose parsed url   slashes: null,
+11 verbose parsed url   auth: null,
+11 verbose parsed url   host: null,
+11 verbose parsed url   port: null,
+11 verbose parsed url   hostname: null,
+11 verbose parsed url   hash: null,
+11 verbose parsed url   search: null,
+11 verbose parsed url   query: null,
+11 verbose parsed url   pathname: 'cookie-parse',
+11 verbose parsed url   path: 'cookie-parse',
+11 verbose parsed url   href: 'cookie-parse' }
+12 silly lockFile bffb95b1-cookie-parse cookie-parse
+13 verbose lock cookie-parse C:\Users\DELL\AppData\Roaming\npm-cache\bffb95b1-cookie-parse.lock
+14 silly lockFile bffb95b1-cookie-parse cookie-parse
+15 silly lockFile bffb95b1-cookie-parse cookie-parse
+16 verbose addNamed [ 'cookie-parse', '' ]
+17 verbose addNamed [ null, '*' ]
+18 silly lockFile 4b157faa-cookie-parse cookie-parse@
+19 verbose lock cookie-parse@ C:\Users\DELL\AppData\Roaming\npm-cache\4b157faa-cookie-parse.lock
+20 silly addNameRange { name: 'cookie-parse', range: '*', hasData: false }
+21 verbose request where is /cookie-parse
+22 verbose request registry https://registry.npmjs.org/
+23 verbose request id 53020c2b97425b51
+24 verbose url raw /cookie-parse
+25 verbose url resolving [ 'https://registry.npmjs.org/', './cookie-parse' ]
+26 verbose url resolved https://registry.npmjs.org/cookie-parse
+27 verbose request where is https://registry.npmjs.org/cookie-parse
+28 info trying registry request attempt 1 at 18:07:12
+29 http GET https://registry.npmjs.org/cookie-parse
+30 http 404 https://registry.npmjs.org/cookie-parse
+31 verbose headers { date: 'Wed, 05 Nov 2014 10:07:11 GMT',
+31 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+31 verbose headers   'content-type': 'application/json',
+31 verbose headers   'cache-control': 'max-age=0',
+31 verbose headers   'content-length': '52',
+31 verbose headers   'accept-ranges': 'bytes',
+31 verbose headers   via: '1.1 varnish',
+31 verbose headers   age: '0',
+31 verbose headers   'x-served-by': 'cache-ty68-TYO',
+31 verbose headers   'x-cache': 'MISS',
+31 verbose headers   'x-cache-hits': '0',
+31 verbose headers   'x-timer': 'S1415182031.586609,VS0,VE115',
+31 verbose headers   'keep-alive': 'timeout=10, max=50',
+31 verbose headers   connection: 'Keep-Alive' }
+32 silly registry.get cb [ 404,
+32 silly registry.get   { date: 'Wed, 05 Nov 2014 10:07:11 GMT',
+32 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+32 silly registry.get     'content-type': 'application/json',
+32 silly registry.get     'cache-control': 'max-age=0',
+32 silly registry.get     'content-length': '52',
+32 silly registry.get     'accept-ranges': 'bytes',
+32 silly registry.get     via: '1.1 varnish',
+32 silly registry.get     age: '0',
+32 silly registry.get     'x-served-by': 'cache-ty68-TYO',
+32 silly registry.get     'x-cache': 'MISS',
+32 silly registry.get     'x-cache-hits': '0',
+32 silly registry.get     'x-timer': 'S1415182031.586609,VS0,VE115',
+32 silly registry.get     'keep-alive': 'timeout=10, max=50',
+32 silly registry.get     connection: 'Keep-Alive' } ]
+33 silly lockFile 4b157faa-cookie-parse cookie-parse@
+34 silly lockFile 4b157faa-cookie-parse cookie-parse@
+35 error 404 404 Not Found: cookie-parse
+35 error 404
+35 error 404 'cookie-parse' is not in the npm registry.
+35 error 404 You should bug the author to publish it
+35 error 404 It was specified as a dependency of 'proxy'
+35 error 404
+35 error 404 Note that you can also install from a
+35 error 404 tarball, folder, or http url, or git url.
+36 error System Windows_NT 6.1.7601
+37 error command "D:\\Program Files\\nodejs\\\\node.exe" "D:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "isntall" "cookie-parse"
+38 error cwd E:\project\devtools\proxy
+39 error node -v v0.10.33
+40 error npm -v 1.4.28
+41 error code E404
+42 verbose exit [ 1, true ]

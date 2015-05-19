@@ -1,0 +1,29 @@
+{
+  "name": "capturearticle",
+  "version": "1.0.0",
+  "description": "抓取文章工具，可以自动整理下载资源到本地，有必要可以清理水印",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nongfadai/captureArticle.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nongfadai/captureArticle/issues"
+  },
+  "homepage": "https://github.com/nongfadai/captureArticle#readme",
+  "dependencies": {
+    "MD5": "^1.2.1",
+    "cheerio": "^0.19.0",
+    "fs-extra": "^0.18.3",
+    "request": "^2.55.0",
+    "urllib-sync": "^1.1.0"
+  }
+}

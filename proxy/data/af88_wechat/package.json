@@ -1,0 +1,15 @@
+{
+  "name": "af88_wechat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "grunt": "^0.4.5",
+    "imweb_ispriter2": "^0.5.0"
+  }
+}
