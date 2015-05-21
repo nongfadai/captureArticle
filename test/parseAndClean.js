@@ -1,8 +1,8 @@
 var $ = require('cheerio');
 var fs = require('fs-extra');
 var path = require("path");
-var MD5= require("MD5");
-var request=require("request");
+var MD5 = require("MD5");
+var request = require("request");
 
 
 var encoding = {
@@ -19,9 +19,26 @@ function main() {
     //console.log(fs);
 
     //console.log($("img"));
-    var newHtml = parseCSSJS(html, baseDir);
-    fs.outputFileSync(cleand_file, newHtml, encoding);
+    var newHtml=html.replace(/data\-src/ig,"src");
+
+    //var newHtml = parseCSSJS(html, baseDir);
+    parseImg(newHtml,baseDir, function(imgs) { //把所有的img都处理完以后
+        for(var i=0;i<imgs.length;i++){
+            var img=imgs[i];
+            var src=img.src;
+            var map=img.map;
+            if(!map){
+                console.log("");
+            }
+            else{
+                newHtml=newHtml.replace(src,map);
+            }
+        }
+        fs.outputFileSync(cleand_file, newHtml, encoding);
+    })
 }
+
+
 
 function parseCSSJS(html, baseDir) {
     var links = html.match(/<link[^>]*?>/ig);
@@ -35,7 +52,7 @@ function parseCSSJS(html, baseDir) {
             if (!attrs.href || !attrs.href.match(/^http/ig)) {
                 continue;
             }
-            var fileName = getAndSaveFile(attrs.href, baseDir,"css");
+            var fileName = getAndSaveFile(attrs.href, baseDir, "css");
             //console.log("fileName", fileName);
             attrs.href = fileName;
             var replacedFile = links[i].replace(/href="[^"]*?"/ig, 'href="' + fileName + '"');
@@ -52,7 +69,7 @@ function parseCSSJS(html, baseDir) {
         if (!src || !src.match(/^http/ig)) {
             continue;
         }
-        var fileName = getAndSaveFile(src, baseDir,"js");
+        var fileName = getAndSaveFile(src, baseDir, "js");
         //console.log("fileName", fileName);
         var replacedFile = setAttr(script, "src", fileName);
         html = html.replace(scripts[i], replacedFile);
@@ -62,34 +79,45 @@ function parseCSSJS(html, baseDir) {
 }
 
 
-function parseImg(html){
+function parseImg(html,baseDir,cb) {
     var imgs = html.match(/<img[^>]*?>/ig);
     console.log("imgs", imgs);
+    var realImgs = [];
     for (var i = 0; i < imgs.length; i++) {
         var item = imgs[i];
-        var src = getAttr(item, "src")||getAttr(item, "data-src");
-        console.log("img.src=["+src+"]");
+        var src = getAttr(item, "src") || getAttr(item, "data-src");
+        console.log("img.src=[" + src + "]");
         if (!src || !src.match(/^http/ig)) {
             //如果是base 64 直接另存为图片
 
             continue;
+        } else {
+            realImgs.push({
+                html: item,
+                src: src
+            });
         }
-        var fileName = getAndSaveFile(src, baseDir,"img");
-        //console.log("fileName", fileName);
-        var replacedFile = setAttr(item, "src", fileName);
-        html = html.replace(imgs[i], replacedFile);
     }
-    //console.log(scripts);
+    console.log("realImgs:");
+    getImageFile(realImgs, baseDir, "img", function() {
+        //console.log("realImgs",realImgs);
+        cb(realImgs);
+    });
 }
 
 function getAttr(str, attr) {
     var attrValue;
-    var reg = new RegExp(attr + "=[\"|\'](.*)?[\"|\']", "ig");
+    var reg = new RegExp(attr + "=[\"]([^\"]*)?[\"]", "ig");
+    var reg2 =new RegExp(attr + "=[\']([^\']*)?[\']", "ig");
     //console.log("reg", reg);
     var result = reg.exec(str);
+    var result2 = reg2.exec(str);
     // console.log(result);
     if (result) {
         attrValue = result[1];
+    }
+    if (result2) {
+        attrValue = result2[1];
     }
     //console.log("attrValue", attrValue);
     return attrValue;
@@ -99,11 +127,10 @@ function getAttr(str, attr) {
 function setAttr(str, attr, value) {
     var result;
     var reg = new RegExp(attr + "=[\"|\'](.*)?[\"|\']", "ig");
-    if(reg.test(str)){//如果已经包含
+    if (reg.test(str)) { //如果已经包含
         result = str.replace(reg, attr + "=\"" + value + "\"");
-    }
-    else{
-        result=str.replace(/>$/," "+attr + "=\"" + value + "\">");
+    } else {
+        result = str.replace(/>$/, " " + attr + "=\"" + value + "\">");
     }
 
     return result;
@@ -115,74 +142,94 @@ function saveBase64(src) {
 
 }
 
-function getFile(url,cb) {
+function getFile(url, cb) {
     var request = require('urllib-sync').request;
 
     var res = request(url);
     //console.log(res);
     console.log(res.headers["content-type"]);
-    var type=res.headers["content-type"]||"";
+    var type = res.headers["content-type"] || "";
     return {
-            type:type.toString(),
-            data:res.data
-        };
-        //res.data.toString();
+        type: type.toString(),
+        data: res.data
+    };
+    //res.data.toString();
     //console.log(res.data.toString());
 }
 
-function getImageFile(url,cb) {
+function getImageFile(imgs, baseDir, fileType, cb) {
     var request = require('request');
-    var opt={encoding:null};
-    request(url,opt,function(err,res,body){
-        if(err){
+    var opt = {
+        encoding: null
+    };
+    var j = 0;
+    console.log("imgs.length="+imgs.length);
+    for (var i = 0; i < imgs.length; i++) {
+        var url = imgs[i].src;
+        console.log("img url= "+i+" ["+url+"]");
+        request(url, opt, function(err, res, body) {
+            j++;
+            if (err) {
 
-        }
-        else{
-            //console.log(body);
-            //console.log(res.headers["content-type"]);
-            var type=res.headers["content-type"]||"";
-            cb&&cd({
-                    type:type.toString(),
-                    data:body
-                });
-        }
-    });
+            } else {
+                //console.log(body);
+                //console.log(res.headers["content-type"]);
+                var type = res.headers["content-type"] || "";
+                var imgType = type.replace("image/", "");
+                var md5Name = MD5(body).substr(0,6);
+                var fileName = md5Name + "." + imgType;
+                console.log("img FileName "+j+" :[" + fileName + "]");
+                
+                try {
+                    var target = path.resolve(baseDir, fileType, fileName);
+                    fs.outputFileSync(target, body);
+                } catch (e) {
+                    console.log("saveImgFile error", e);
+                }
+
+                this.map="img/"+fileName;
+                if(j==imgs.length){
+                    cb();
+                }
+            }
+        }.bind(imgs[i]));
+    }
 }
 
-function getAndSaveFile(url, baseDir,fileType) {
+
+function getAndSaveFile(url, baseDir, fileType) {
     var file = getFile(url);
-    var imgType="";
-    console.log("file.type",file.type);
-    if(file.type.match(/^image/ig)){
-        imgType=file.type.replace("image/","");
+    var imgType = "";
+    console.log("file.type", file.type);
+    if (file.type.match(/^image/ig)) {
+        imgType = file.type.replace("image/", "");
 
     }
-    var content=file.data.toString();
+    var content = file.data.toString();
     var fileName = url.replace(/[\?\#].*$/, "");
     fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
-    var md5Name=MD5(file.data);
-    if(imgType){
-        fileName=md5Name+"."+imgType;
+    var md5Name = MD5(file.data);
+    if (imgType) {
+        fileName = md5Name + "." + imgType;
     }
     console.log(fileName);
-    try{
+    try {
         var target = path.resolve(baseDir, fileType, fileName);
-        if(fileType=="img"){
+        if (fileType == "img") {
             fs.outputFileSync(target, content);
-        }
-        else{
+        } else {
             fs.outputFileSync(target, content, encoding);
         }
-    }catch(e){
-        console.log("saveFile error",target);
+    } catch (e) {
+        console.log("saveFile error", target);
     }
 
-    return fileType+"/" + fileName;
+    return fileType + "/" + fileName;
 }
 
-var url="http://mmbiz.qpic.cn/mmbiz/lWNl5icgL8dOa2GkbbBafcMvfupicpUicoWZh3Dy4YUnVUe4eHhB23icdLJ9ffRa7MVibNSepdKB5myGmOSibkiafibITA/0";
+var url = "http://mmbiz.qpic.cn/mmbiz/lWNl5icgL8dOa2GkbbBafcMvfupicpUicoWZh3Dy4YUnVUe4eHhB23icdLJ9ffRa7MVibNSepdKB5myGmOSibkiafibITA/0";
 
-//main();
-getImageFile(url);
+main();
+//getImageFile(url);
 //getAndSaveFile(url);
 //getFile();
