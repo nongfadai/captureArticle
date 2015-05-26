@@ -3,7 +3,7 @@ var app = express();
 var fs = require("fs");
 var util = require('util');
 var cookieParser = require('cookie-parser')
-var basePath="data/register2";
+var basePath="data/m.nongfadai";
 
 process.on('uncaughtException', function(e) {
   console.log("server on error");　　
@@ -56,7 +56,7 @@ app.all('*', function(req, res, next) {
   }
   //console.log(arr.sort());
   //console.log(req.headers);
-  //console.log("node receive reqest " + req.path);
+  console.log("node receive reqest " + req.path);
   direct(req, res); //直接转发
 });
 
@@ -77,7 +77,7 @@ var request = require("request");
 function direct(req, res) {
   //console.log("req.protocol",req.protocol);
   //console.log("req.host",req.host);
-  //console.log("req.path",req.path);
+  console.log("req.path",req.path);
 
   var url =req.protocol+"://"+ req.host+req.path;
   //"http://www.baidu.com";
